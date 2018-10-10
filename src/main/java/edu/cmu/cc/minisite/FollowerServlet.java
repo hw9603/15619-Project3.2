@@ -1,5 +1,6 @@
 package edu.cmu.cc.minisite;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -78,7 +79,26 @@ public class FollowerServlet extends HttpServlet {
             throws ServletException, IOException {
         JsonObject result = new JsonObject();
         String id = request.getParameter("id");
-        // TODO: To be implemented
+        String query = "MATCH (follower:User)-[r:FOLLOWS]->(followee:User)"
+                        + " WHERE followee.username = '" + id
+                        + "' RETURN follower.username, follower.url"
+                        + " ORDER BY follower.username ASC;";
+
+        JsonArray followers = new JsonArray();
+
+        try (Session session = driver.session()) {
+            StatementResult rs = session.run(query);
+            while (rs.hasNext()) {
+                Record record = rs.next();
+                JsonObject follower = new JsonObject();
+                follower.addProperty("profile", record.get(1).asString());
+                follower.addProperty("name", record.get(0).asString());
+                followers.add(follower);
+            }
+        }
+
+        result.add("followers", followers);
+
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter writer = response.getWriter();

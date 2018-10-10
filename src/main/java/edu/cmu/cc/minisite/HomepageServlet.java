@@ -1,13 +1,20 @@
 package edu.cmu.cc.minisite;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Sorts;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Objects;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.bson.Document;
-
 
 /**
  * Task 3:
@@ -78,10 +84,25 @@ public class HomepageServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest request,
                          final HttpServletResponse response) throws ServletException, IOException {
-
         JsonObject result = new JsonObject();
         String id = request.getParameter("id");
-        // TODO: To be implemented
+
+        MongoCursor<Document> cursor = collection.find(Filters.eq("uid", id))
+                .sort(Sorts.orderBy(Sorts.descending("ups"), Sorts.descending("timestamp")))
+                .projection(Projections.fields(Projections.exclude(Arrays.asList("_id"))))
+                .iterator();
+
+        JsonArray comments = new JsonArray();
+        try {
+            while (cursor.hasNext()) {
+                JsonObject jsonObject = new JsonParser().parse(cursor.next().toJson())
+                        .getAsJsonObject();
+                comments.add(jsonObject);
+            }
+        } finally {
+            cursor.close();
+        }
+        result.add("comments", comments);
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter writer = response.getWriter();

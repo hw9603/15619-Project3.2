@@ -1,7 +1,7 @@
 # configurations for MySQL database
 export MYSQL_HOST="35.229.56.253"
 export MYSQL_NAME="default"
-export MYSQL_PWD="84b6da75d66b4b87"
+export MYSQL_PWD="default"
 
 # configurations for Neo4j database
 export NEO4J_HOST="35.231.174.115"

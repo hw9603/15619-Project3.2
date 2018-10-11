@@ -93,17 +93,26 @@ public class TimelineServlet extends HttpServlet {
      * Your initialization code goes here.
      */
     public TimelineServlet() throws ClassNotFoundException, SQLException {
+        /**
+         * Intialize MySQL database.
+         */
         Class.forName(JDBC_DRIVER);
         Objects.requireNonNull(MYSQL_HOST);
         Objects.requireNonNull(MYSQL_NAME);
         Objects.requireNonNull(MYSQL_PWD);
         conn = DriverManager.getConnection(MYSQL_URL, MYSQL_NAME, MYSQL_PWD);
 
+        /**
+         * Intialize Neo4j database.
+         */
         Objects.requireNonNull(NEO4J_HOST);
         Objects.requireNonNull(NEO4J_NAME);
         Objects.requireNonNull(NEO4J_PWD);
         driver = GraphDatabase.driver(NEO4J_URL, AuthTokens.basic(NEO4J_NAME, NEO4J_PWD));
 
+        /**
+         * Intialize MongoDB server.
+         */
         Objects.requireNonNull(MONGO_HOST);
         MongoClientURI connectionString = new MongoClientURI(MONGO_URL);
         MongoClient mongoClient = new MongoClient(connectionString);
@@ -200,6 +209,9 @@ public class TimelineServlet extends HttpServlet {
                 JsonObject comment = new JsonParser().parse(cursor.next().toJson())
                         .getAsJsonObject();
                 String parentId = comment.get("parent_id").getAsString();
+                /**
+                 * Try to access parent comment.
+                 */
                 MongoCursor<Document> parentCursor = collection.find(Filters.eq("cid", parentId))
                         .projection(Projections.fields(Projections.exclude(Arrays.asList("_id"))))
                         .iterator();
@@ -210,6 +222,9 @@ public class TimelineServlet extends HttpServlet {
                                 .getAsJsonObject();
                         comment.add("parent", parentComment);
                         String grandparentId = parentComment.get("parent_id").getAsString();
+                        /**
+                         * Try to access grandparent comment.
+                         */
                         MongoCursor<Document> grandparentCursor = collection
                             .find(Filters.eq("cid", grandparentId))
                             .projection(Projections.fields(

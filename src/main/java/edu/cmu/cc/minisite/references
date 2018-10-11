@@ -2,10 +2,28 @@
   "referenceGuide":"Cite all the reference sources in the required format. Proper citations will help you avoid unnecessary trouble but does not make it acceptable to copy code. Read the course and university policy statements in this regard. When working with others, limit the discussion to block diagrams and arrows. Do not look at another students' code. Read the JSON semantics and make use of JSON validator from the Internet if needed.",
   "websites":[
     {
-      "title":"<title of the page>",
-      "url":"<url>",
+      "title":"Using Prepared Statements",
+      "url":"https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html",
       "code":"<explain in which part of your code did you use the snippet or idea>",
-      "description":"<additional information you may find necessary to provide>"
+      "description":"I learned how to use prepared statement to generate a SQL query."
+    },
+    {
+      "title":"Class Sorts",
+      "url":"http://api.mongodb.com/java/current/com/mongodb/client/model/Sorts.html",
+      "code":"<explain in which part of your code did you use the snippet or idea>",
+      "description":"I learned how to use sort the result returned by MongoDB in Java."
+    },
+    {
+      "title":"Class Filters",
+      "url":"https://mongodb.github.io/mongo-java-driver/3.4/javadoc/?com/mongodb/client/model/Filters.html",
+      "code":"<explain in which part of your code did you use the snippet or idea>",
+      "description":"I learned how to use filter the result returned by MongoDB by some columns in Java."
+    },
+    {
+      "title":"Class Projections",
+      "url":"http://api.mongodb.com/java/3.0/?com/mongodb/client/model/Projections.html",
+      "code":"<explain in which part of your code did you use the snippet or idea>",
+      "description":"I learned how to exclude some columns in MongoDB."
     }
   ],
   "collaborators":[

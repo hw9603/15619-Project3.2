@@ -124,6 +124,9 @@ public class ProfileServlet extends HttpServlet {
             System.err.println(e);
         }
 
+        /**
+         * The user is invalid.
+         */
         if (!foundIdentity) {
             name = "Unauthorized";
         }
